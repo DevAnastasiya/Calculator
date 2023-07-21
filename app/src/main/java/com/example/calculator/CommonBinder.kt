@@ -7,7 +7,6 @@ import com.example.calculator.commands.MinusCommand
 import com.example.calculator.commands.MultiplyCommand
 import com.example.calculator.commands.PercentCommand
 import com.example.calculator.commands.PlusCommand
-import com.example.calculator.commands.PointCommand
 import com.example.calculator.commands.TwoZerosCommand
 import com.example.calculator.commands.ZeroCommand
 
@@ -25,8 +24,6 @@ object CommonBinder {
     private val multiplyCom = MultiplyCommand()
     private val percentCom = PercentCommand()
     private val plusCom = PlusCommand()
-    private val pointCom = PointCommand()
-    private val twoZerosCom = TwoZerosCommand()
     private val zeroCom = ZeroCommand()
 
     private val plus = "+"
@@ -36,22 +33,33 @@ object CommonBinder {
     private val point = "."
     private val equals = "="
     private val percent = "%"
-    private val twoZeros = "00"
+    private val twoZeros = 'z'
     private val zero = "0"
 
     private var first_number = String()
-    private var activeCommand = String()
+    private var activeCommand = String() // оператор
     private var second_number = String()
 
-    // private var result = String
     var readyToClear = false
     var pointAllowance = true
 
     fun clicked(str: String): String { // Для clear, deleteLast
         if (str.isEmpty()) {
+            first_number = String()
+            activeCommand = String()
+            second_number = String()
             return clearCom.execute()
-        } else
+        } else {
+            if (str == activeCommand) {
+                activeCommand = String()
+            }
+            if (str == first_number) { // значит работает с firstNumber
+                first_number = deleteCom.execute(str)
+            } else {
+                second_number = deleteCom.execute(str)
+            }
             return deleteCom.execute(str)
+        }
     }
 
     fun clicked(c: Char): String {
@@ -59,9 +67,17 @@ object CommonBinder {
             if (c.isDigit() ||
                 c.toString() == point
             ) { // Запись первого числа
-                first_number += c
+                if (c == twoZeros)
+                    first_number += zero + zero
+                else
+                    first_number += c
                 return first_number
             } else {
+                if (c.toString() == percent) { // "20%..."
+                    first_number = (first_number.toDouble() / 100).toString()
+                    activeCommand = multiply
+                    return first_number
+                }
                 activeCommand = String() + c // Запись оператора
                 return activeCommand
             }
@@ -69,15 +85,23 @@ object CommonBinder {
             if (c.isDigit() ||
                 c.toString() == point
             ) { // Запись второго числа
-                second_number += c
+                if (c == twoZeros)
+                    second_number += zero + zero
+                else
+                    second_number += c
                 return second_number
             } else {
                 if (second_number.isEmpty()) { // Смена оператора
                     activeCommand = String() + c
                     return activeCommand
                 }
+                if (c.toString() == percent) { // 100 - 20%...
+                    second_number = (
+                            first_number.toDouble() / 100 * second_number.toDouble()).toString()
+                }
+
                 var temp = String()
-                when (activeCommand) { // ДОБАВИТЬ ПРОЦЕНТЫ!!
+                when (activeCommand) {
                     (plus) -> {
                         temp = plusCom.execute(first_number, second_number)
                     }
@@ -109,50 +133,4 @@ object CommonBinder {
             }
         }
     }
-//
-//    fun getFirstNumber(): String {
-//        return first_number
-//    }
-//
-//    fun setFirstNumber(number: String) {
-//        this.first_number = number
-//    }
-//
-//    fun getSecondNumber(): String {
-//        return second_number
-//    }
-//
-//    fun setSecondNumber(number: String) {
-//        this.second_number = number
-//    }
-//
-//    fun getOperator(): String {
-//        return activeCommand
-//    }
-//
-//    fun setOperator(operator: String) {
-//        this.activeCommand = operator
-//    }
-
-//    fun getResult(): String {
-//        return result
-//    }
-//
-//    fun setResult(number: String) {
-//        this.result = number
-//    }
-//
-//    fun clearData() {
-//        this.first_number = String()
-//        this.second_number = String()
-//        //this.result = String()
-//        this.activeCommand = String()
-//    }
-//
-//    fun setReadyToClear(tv: TextView) {
-//        if (readyToClear) {
-//            tv.text = String()
-//            readyToClear = false
-//        }
-//    }
 }

@@ -1,6 +1,7 @@
 package com.example.claculator
 
 import android.os.Bundle
+import android.os.PersistableBundle
 import android.widget.Button
 import android.widget.TextView
 import androidx.activity.ComponentActivity
@@ -60,92 +61,85 @@ class MainActivity : ComponentActivity() {
             val str: String = binder.clicked('2')
             tv.text = str
         }
-//
+
 //        // 3
         btnThree.setOnClickListener {
 
             val str: String = binder.clicked('3')
             tv.text = str
         }
-//
+
 //        // 4
         btnFour.setOnClickListener {
 
             val str: String = binder.clicked('4')
             tv.text = str
         }
-//
+
 //        // 5
         btnFive.setOnClickListener {
 
             val str: String = binder.clicked('5')
             tv.text = str
         }
-//
+
 //        // 6
         btnSix.setOnClickListener {
 
             val str: String = binder.clicked('6')
             tv.text = str
         }
-//
+
 //        // 7
         btnSeven.setOnClickListener {
 
             val str: String = binder.clicked('7')
             tv.text = str
         }
-//
+
 //        // 8
         btnEight.setOnClickListener {
 
             val str: String = binder.clicked('8')
             tv.text = str
         }
-//
+
 //        // 9
         btnNine.setOnClickListener {
 
             val str: String = binder.clicked('9')
             tv.text = str
         }
-//
+
 //        // 00
-//        btnTwoZeros.setOnClickListener {
-//
-//            val str: String? = binder.clicked("00")
-//            tv.text = str
-//        }
+        btnTwoZeros.setOnClickListener {
+
+            val str: String? = binder.clicked('z')
+            tv.text = str
+        }
 
         // ОПЕРАТОРЫ
 
         // clear
-//        btnClear.setOnClickListener {
-//
-//            val clearButton = ClearButton(tv)
-//            val clearCommand = ClearCommand(clearButton)
-//            clearCommand.execute()
-//            binder.clearData()
-//            binder.pointAllowance = true
-//        }
-//
-//        // delete last char
-//        btnDeleteLast.setOnClickListener {
-//
-//            binder.setReadyToClear(tv)
-//            val deleteLastButton = DeleteLastButton(tv)
-//            val deleteLastCommand = DeleteLastCommand(deleteLastButton)
-//            deleteLastCommand.execute()
-//        }
-//
+        btnClear.setOnClickListener {
+
+            val str: String = binder.clicked("")
+            tv.text = str
+        }
+
+        // delete last char
+        btnDeleteLast.setOnClickListener {
+
+            val str: String = binder.clicked(tv.text.toString())
+            tv.text = str
+        }
+
 //        // точка
-//        btnPoint.setOnClickListener {
-//
-//            binder.setReadyToClear(tv)
-//            val pointButton = PointButton(tv)
-//            val pointCommand = PointCommand(pointButton)
-//            pointCommand.execute()
-//        }
+        btnPoint.setOnClickListener {
+
+            val str: String = binder.clicked('.')
+            tv.text = str
+        }
 
         // сложение
         btnPlus.setOnClickListener {
@@ -178,15 +172,13 @@ class MainActivity : ComponentActivity() {
             tv.text = str
             tv.maxLines = 1 // Проблема с исключениями
         }
-//
+
 //        // проценты
-//        btnPercent.setOnClickListener {
-//
-//            binder.setReadyToClear(tv)
-//            val percentButton = PercentButton(tv)
-//            val percentCommand = PercentCommand(percentButton)
-//            percentCommand.execute()
-//        }
+        btnPercent.setOnClickListener {
+
+            val str: String = binder.clicked('%')
+            tv.text = str
+        }
 
         // посчитать
         btnEquals.setOnClickListener {
@@ -195,5 +187,19 @@ class MainActivity : ComponentActivity() {
             tv.text = str
             tv.maxLines = 1
         }
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+
+        val tv: TextView = findViewById(R.id.tv_result)
+        outState.putString("TextView", tv.text.toString())
+    }
+
+    override fun onRestoreInstanceState(savedInstanceState: Bundle) {
+        super.onRestoreInstanceState(savedInstanceState)
+
+        val tv: TextView = findViewById(R.id.tv_result)
+        tv.text = savedInstanceState.getString("TextView")
     }
 }

@@ -19,5 +19,6 @@
     <string name="percentage">%</string>
     <string name="delete_last_symbol"><![CDATA[<-]]></string>
     <string name="divide">/</string>
+    <string name="equals">=</string>
 
 </resources>

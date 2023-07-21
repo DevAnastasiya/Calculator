@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="GreyButton" parent="TextAppearance.AppCompat">
+        <item name="android:textSize">28sp</item>
+        <item name="android:textColor">@color/additional_light_grey</item>
+    </style>
+
+
+    <style name="GreenButton" parent="TextAppearance.AppCompat">
+        <item name="android:textSize">28sp</item>
+        <item name="android:textColor">@color/additional_light_grey</item>
+    </style>
+
+</resources>
