@@ -4,15 +4,12 @@ import android.os.Bundle
 import android.widget.Button
 import android.widget.TextView
 import androidx.activity.ComponentActivity
-import com.example.calculator.R
 import com.example.claculator.common.CommonBinder
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
-
 
         // find views by id: операторы
         val btnClear: Button = findViewById(R.id.btn_clear)
@@ -53,173 +50,150 @@ class MainActivity : ComponentActivity() {
         // 1
         btnOne.setOnClickListener {
 
-            val str: String? = binder.clicked('1')
+            val str: String = binder.clicked('1')
             tv.text = str
         }
 
         // 2
         btnTwo.setOnClickListener {
 
-            val str: String? = binder.clicked('2')
+            val str: String = binder.clicked('2')
             tv.text = str
         }
-
-        // 3
+//
+//        // 3
         btnThree.setOnClickListener {
 
-            binder.setReadyToClear(tv)
-            val threeButton = ThreeButton(tv)
-            val threeCommand = ThreeCommand(threeButton)
-            threeCommand.execute()
+            val str: String = binder.clicked('3')
+            tv.text = str
         }
-
-        // 4
+//
+//        // 4
         btnFour.setOnClickListener {
 
-            binder.setReadyToClear(tv)
-            val fourButton = FourButton(tv)
-            val fourCommand = FourCommand(fourButton)
-            fourCommand.execute()
+            val str: String = binder.clicked('4')
+            tv.text = str
         }
-
-        // 5
+//
+//        // 5
         btnFive.setOnClickListener {
 
-            binder.setReadyToClear(tv)
-            val fiveButton = FiveButton(tv)
-            val fiveCommand = FiveCommand(fiveButton)
-            fiveCommand.execute()
+            val str: String = binder.clicked('5')
+            tv.text = str
         }
-
-        // 6
+//
+//        // 6
         btnSix.setOnClickListener {
 
-            binder.setReadyToClear(tv)
-            val sixButton = SixButton(tv)
-            val sixCommand = SixCommand(sixButton)
-            sixCommand.execute()
+            val str: String = binder.clicked('6')
+            tv.text = str
         }
-
-        // 7
+//
+//        // 7
         btnSeven.setOnClickListener {
 
-            binder.setReadyToClear(tv)
-            val sevenButton = SevenButton(tv)
-            val sevenCommand = SevenCommand(sevenButton)
-            sevenCommand.execute()
+            val str: String = binder.clicked('7')
+            tv.text = str
         }
-
-        // 8
+//
+//        // 8
         btnEight.setOnClickListener {
 
-            binder.setReadyToClear(tv)
-            val eightButton = EightButton(tv)
-            val eightCommand = EightCommand(eightButton)
-            eightCommand.execute()
+            val str: String = binder.clicked('8')
+            tv.text = str
         }
-
-        // 9
+//
+//        // 9
         btnNine.setOnClickListener {
 
-            binder.setReadyToClear(tv)
-            val nineButton = NineButton(tv)
-            val nineCommand = NineCommand(nineButton)
-            nineCommand.execute()
+            val str: String = binder.clicked('9')
+            tv.text = str
         }
-
-        // 00
-        btnTwoZeros.setOnClickListener {
-
-            binder.setReadyToClear(tv)
-            val twoZerosButton = TwoZerosButton(tv)
-            val twoZerosCommand = TwoZerosCommand(twoZerosButton)
-            twoZerosCommand.execute()
-        }
+//
+//        // 00
+//        btnTwoZeros.setOnClickListener {
+//
+//            val str: String? = binder.clicked("00")
+//            tv.text = str
+//        }
 
         // ОПЕРАТОРЫ
 
         // clear
-        btnClear.setOnClickListener {
-
-            val clearButton = ClearButton(tv)
-            val clearCommand = ClearCommand(clearButton)
-            clearCommand.execute()
-            binder.clearData()
-            binder.pointAllowance = true
-        }
-
-        // delete last char
-        btnDeleteLast.setOnClickListener {
-
-            binder.setReadyToClear(tv)
-            val deleteLastButton = DeleteLastButton(tv)
-            val deleteLastCommand = DeleteLastCommand(deleteLastButton)
-            deleteLastCommand.execute()
-        }
-
-        // точка
-        btnPoint.setOnClickListener {
-
-            binder.setReadyToClear(tv)
-            val pointButton = PointButton(tv)
-            val pointCommand = PointCommand(pointButton)
-            pointCommand.execute()
-        }
+//        btnClear.setOnClickListener {
+//
+//            val clearButton = ClearButton(tv)
+//            val clearCommand = ClearCommand(clearButton)
+//            clearCommand.execute()
+//            binder.clearData()
+//            binder.pointAllowance = true
+//        }
+//
+//        // delete last char
+//        btnDeleteLast.setOnClickListener {
+//
+//            binder.setReadyToClear(tv)
+//            val deleteLastButton = DeleteLastButton(tv)
+//            val deleteLastCommand = DeleteLastCommand(deleteLastButton)
+//            deleteLastCommand.execute()
+//        }
+//
+//        // точка
+//        btnPoint.setOnClickListener {
+//
+//            binder.setReadyToClear(tv)
+//            val pointButton = PointButton(tv)
+//            val pointCommand = PointCommand(pointButton)
+//            pointCommand.execute()
+//        }
 
         // сложение
         btnPlus.setOnClickListener {
 
-            binder.setReadyToClear(tv)
-            val plusButton = PlusButton(tv)
-            val plusCommand = PlusCommand(plusButton)
-            plusCommand.execute()
+            val str: String = binder.clicked('+')
+            tv.text = str
+            tv.maxLines = 1
         }
 
         // вычитание
         btnMinus.setOnClickListener {
 
-            binder.setReadyToClear(tv)
-            val minusButton = MinusButton(tv)
-            val minusCommand = MinusCommand(minusButton)
-            minusCommand.execute()
+            val str: String = binder.clicked('-')
+            tv.text = str
+            tv.maxLines = 1
         }
-
-        // умножить
+//
+//        // умножить
         btnMultiply.setOnClickListener {
 
-            binder.setReadyToClear(tv)
-            val multiplyButton = MultiplyButton(tv)
-            val multiplyCommand = MultiplyCommand(multiplyButton)
-            multiplyCommand.execute()
+            val str: String = binder.clicked('*')
+            tv.text = str
+            tv.maxLines = 1
         }
-
-        // разделить
+//
+//        // разделить
         btnDivide.setOnClickListener {
 
-            binder.setReadyToClear(tv)
-            val divideButton = DivideButton(tv)
-            val divideCommand = DivideCommand(divideButton)
-            divideCommand.execute()
+            val str: String = binder.clicked('/')
+            tv.text = str
+            tv.maxLines = 1 // Проблема с исключениями
         }
-
-        // проценты
-        btnPercent.setOnClickListener {
-
-            binder.setReadyToClear(tv)
-            val percentButton = PercentButton(tv)
-            val percentCommand = PercentCommand(percentButton)
-            percentCommand.execute()
-        }
+//
+//        // проценты
+//        btnPercent.setOnClickListener {
+//
+//            binder.setReadyToClear(tv)
+//            val percentButton = PercentButton(tv)
+//            val percentCommand = PercentCommand(percentButton)
+//            percentCommand.execute()
+//        }
 
         // посчитать
         btnEquals.setOnClickListener {
 
-            val equalsButton = EqualsButton(tv)
-            val equalsCommand = EqualsCommand(equalsButton)
-            equalsCommand.execute()
-            binder.clearData()
-            binder.readyToClear = true
-            binder.pointAllowance = true
+            val str: String = binder.clicked('=')
+            tv.text = str
+            tv.maxLines = 1
         }
     }
 }

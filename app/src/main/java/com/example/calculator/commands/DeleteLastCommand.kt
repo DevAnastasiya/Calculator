@@ -1,9 +1,8 @@
 package com.example.calculator.commands
 
-import com.example.claculator.common.Command
-
-class DeleteLastCommand : Command {
-    override fun execute(): Int? {
-        TODO("Not yet implemented")
+class DeleteLastCommand {
+     fun execute(str: String): String {
+        return str.substring(0, str.lastIndex)
     }
+
 }

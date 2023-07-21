@@ -1,9 +1,8 @@
 package com.example.calculator.commands
 
-import com.example.claculator.common.Command
+class ClearCommand {
 
-class ClearCommand : Command {
-    override fun execute(): Int? {
-        TODO("Not yet implemented")
+     fun execute(): String {
+        return String()
     }
 }
