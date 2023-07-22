@@ -7,8 +7,6 @@ import com.example.calculator.commands.MinusCommand
 import com.example.calculator.commands.MultiplyCommand
 import com.example.calculator.commands.PercentCommand
 import com.example.calculator.commands.PlusCommand
-import com.example.calculator.commands.TwoZerosCommand
-import com.example.calculator.commands.ZeroCommand
 
 object CommonBinder {
 
@@ -24,7 +22,6 @@ object CommonBinder {
     private val multiplyCom = MultiplyCommand()
     private val percentCom = PercentCommand()
     private val plusCom = PlusCommand()
-    private val zeroCom = ZeroCommand()
 
     private val plus = "+"
     private val minus = "-"
