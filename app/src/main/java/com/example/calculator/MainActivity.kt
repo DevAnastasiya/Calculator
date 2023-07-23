@@ -136,7 +136,7 @@ class MainActivity : ComponentActivity() {
         // точка
         btnPoint.setOnClickListener {
 
-            val str: String = binder.clickedDigit('.')
+            val str: String = binder.clickedPoint(tv.text.toString())
             tv.text = str
         }
 
@@ -175,14 +175,14 @@ class MainActivity : ComponentActivity() {
         // проценты
         btnPercent.setOnClickListener {
 
-            val str: String = binder.clickedPercent()
+            val str: String = binder.clickedPercent(tv.text.toString())
             tv.text = str
         }
 
         // посчитать
         btnEquals.setOnClickListener {
 
-            val str: String = binder.clickedCommand('=')
+            val str: String = binder.clickedEquals(tv.text.toString())
             tv.text = str
             tv.maxLines = 2
         }

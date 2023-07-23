@@ -24,15 +24,16 @@ object CommonBinder {
     private const val MINUS = "-"
     private const val DIVIDE = "/"
     private const val MULTIPLY = "*"
-    private const val EQUALS = "="
+    private const val EQUALS = '='
     private const val PERCENT = '%'
     private const val ZERO = "0"
+    private const val POINT = '.'
+
 
     private var first_number = String()
     private var activeCommand = String() // оператор
     private var second_number = String()
-    private var readyToClear = false
-    private var pointAllowance = true
+    private var pointAllowance = true // разрешение для ввода точки
 
     fun clickedDeleteLast(text: String): String {
         if (text.isEmpty())
@@ -42,7 +43,7 @@ object CommonBinder {
             activeCommand = newString
 
         } else {
-            if (activeCommand.isEmpty()) // значит работает с firstNumber
+            if (activeCommand.isEmpty()) // значит работаем с firstNumber
                 first_number = newString
             else
                 second_number = newString
@@ -65,6 +66,7 @@ object CommonBinder {
         first_number = String()
         activeCommand = String()
         second_number = String()
+        pointAllowance = true
         return String()
     }
 
@@ -79,7 +81,11 @@ object CommonBinder {
         }
     }
 
-    fun clickedPercent(): String {
+    fun clickedPercent(text: String): String {
+
+        if (text.last().isDigit().not())
+            return text
+
         val temp: String
         if (activeCommand.isEmpty()) { // "20%..." - ищем процент от второго числа
             temp = first_number
@@ -90,12 +96,35 @@ object CommonBinder {
             temp = second_number
             second_number = Percent_Com.execute(first_number, second_number)
         }
+        pointAllowance = true
         return temp + PERCENT
+    }
+
+    fun clickedEquals(text: String): String { // Проверка на допустимость ввода "="
+        return if (second_number.isEmpty())
+            text
+        else
+            clickedCommand(EQUALS)
+    }
+
+    fun clickedPoint(text: String): String { // Проверка на допустимость ввода "."
+       return if (text.isNotEmpty()) {
+            if (pointAllowance) {
+                if (text.last().isDigit()) {
+                    pointAllowance = false
+                    clickedDigit(POINT)
+                } else
+                    text
+            } else
+                text
+        } else
+            text
     }
 
     fun clickedCommand(c: Char): String {
         if (activeCommand.isEmpty()) {
             activeCommand = String() + c // Запись оператора
+            pointAllowance = true
             return activeCommand
 
         } else {
@@ -124,7 +153,7 @@ object CommonBinder {
             }
             second_number = String()
 
-            if (c.toString() == EQUALS) { // Если ввели команду "=" - очищаем данные
+            if (c == EQUALS) { // Если ввели команду "=" - очищаем данные
                 first_number = String()
                 activeCommand = String()
             } else {
@@ -136,8 +165,9 @@ object CommonBinder {
                 temp.dropLast(2)
             else
                 ((temp.toDouble() * 1000).roundToInt().toDouble() / 1000).toString()
-            // В строке выше не убрать какое-либо из приведений к типу, иначе неверное округление
+            // В строке выше не убрать какое-либо из приведений к типу - иначе неверное округление
 
+            pointAllowance = true
             return temp
         }
     }
