@@ -1,28 +1,26 @@
 package com.example.calculator.commands
 
-import com.example.calculator.Exceptions
+import com.example.calculator.Validator
 import com.example.claculator.common.Command
 
 class PercentCommand : Command {
 
-    private val exceptions = Exceptions()
+    private val Validator = Validator()
+
     override fun execute(firstNumber: String, secondNumber: String): String {
 
-        val temp: String
-        val res: String
-
-        if (secondNumber.isEmpty()) {
-            if (exceptions.formatFirst(firstNumber).isEmpty()) {
-                return (firstNumber.toDouble() / 100).toString()
-
-            }
-            return exceptions.formatFirst(firstNumber)
+        if (secondNumber.isEmpty()) { // "20%..." - ищем процент от второго числа
+            return if (Validator.formatFirst(firstNumber) is NumberFormatException)
+                "Неверный формат"
+            else
+                (firstNumber.toDouble() / 100).toString()
         } else {
-            if (exceptions.format(firstNumber, secondNumber).isEmpty()) {
-                temp = (firstNumber.toDouble() / 100).toString()
-                return (temp.toDouble() * secondNumber.toDouble()).toString()
+            return if (Validator.format(firstNumber, secondNumber) is NumberFormatException)
+                "Неверный формат"
+            else { // находим значение второго числа
+                val temp = firstNumber.toDouble() / 100 * secondNumber.toDouble()
+                temp.toString()
             }
-            return exceptions.format(firstNumber, secondNumber)
         }
     }
 }
