@@ -36,84 +36,84 @@ class MainActivity : ComponentActivity() {
         val btnPoint: Button = findViewById(R.id.btn_point)
         val btnTwoZeros: Button = findViewById(R.id.btn_two_zeros)
 
-        val binder = CommonBinder
+        val Binder = CommonBinder
 
         // ДАЛЕЕ - ИНИЦИАЛИЗАЦИЯ КНОПОЧЕК
 
         // 0
         btnZero.setOnClickListener {
 
-            val str: String = binder.clickedDigit('0')
+            val str: String = Binder.clickedDigit('0')
             tv.text = str
         }
 
         // 1
         btnOne.setOnClickListener {
 
-            val str: String = binder.clickedDigit('1')
+            val str: String = Binder.clickedDigit('1')
             tv.text = str
         }
 
         // 2
         btnTwo.setOnClickListener {
 
-            val str: String = binder.clickedDigit('2')
+            val str: String = Binder.clickedDigit('2')
             tv.text = str
         }
 
         // 3
         btnThree.setOnClickListener {
 
-            val str: String = binder.clickedDigit('3')
+            val str: String = Binder.clickedDigit('3')
             tv.text = str
         }
 
         // 4
         btnFour.setOnClickListener {
 
-            val str: String = binder.clickedDigit('4')
+            val str: String = Binder.clickedDigit('4')
             tv.text = str
         }
 
         // 5
         btnFive.setOnClickListener {
 
-            val str: String = binder.clickedDigit('5')
+            val str: String = Binder.clickedDigit('5')
             tv.text = str
         }
 
         // 6
         btnSix.setOnClickListener {
 
-            val str: String = binder.clickedDigit('6')
+            val str: String = Binder.clickedDigit('6')
             tv.text = str
         }
 
         // 7
         btnSeven.setOnClickListener {
 
-            val str: String = binder.clickedDigit('7')
+            val str: String = Binder.clickedDigit('7')
             tv.text = str
         }
 
         // 8
         btnEight.setOnClickListener {
 
-            val str: String = binder.clickedDigit('8')
+            val str: String = Binder.clickedDigit('8')
             tv.text = str
         }
 
         // 9
         btnNine.setOnClickListener {
 
-            val str: String = binder.clickedDigit('9')
+            val str: String = Binder.clickedDigit('9')
             tv.text = str
         }
 
         // 00
         btnTwoZeros.setOnClickListener {
 
-            val str: String = binder.clickedTwoZeros()
+            val str: String = Binder.clickedTwoZeros()
             tv.text = str
         }
 
@@ -122,28 +122,28 @@ class MainActivity : ComponentActivity() {
         // clear
         btnClear.setOnClickListener {
 
-            val str: String = binder.clickedClear()
+            val str: String = Binder.clickedClear()
             tv.text = str
         }
 
         // delete last char
         btnDeleteLast.setOnClickListener {
 
-            val str: String = binder.clickedDeleteLast(tv.text.toString())
+            val str: String = Binder.clickedDeleteLast(tv.text.toString())
             tv.text = str
         }
 
         // точка
         btnPoint.setOnClickListener {
 
-            val str: String = binder.clickedPoint(tv.text.toString())
+            val str: String = Binder.clickedPoint(tv.text.toString())
             tv.text = str
         }
 
         // сложение
         btnPlus.setOnClickListener {
 
-            val str: String = binder.clickedCommand('+')
+            val str: String = Binder.clickedCommand('+')
             tv.text = str
             tv.maxLines = 2
         }
@@ -151,7 +151,7 @@ class MainActivity : ComponentActivity() {
         // вычитание
         btnMinus.setOnClickListener {
 
-            val str: String = binder.clickedCommand('-')
+            val str: String = Binder.clickedCommand('-')
             tv.text = str
             tv.maxLines = 2
         }
@@ -159,7 +159,7 @@ class MainActivity : ComponentActivity() {
         // умножить
         btnMultiply.setOnClickListener {
 
-            val str: String = binder.clickedCommand('*')
+            val str: String = Binder.clickedCommand('*')
             tv.text = str
             tv.maxLines = 2
         }
@@ -167,7 +167,7 @@ class MainActivity : ComponentActivity() {
         // разделить
         btnDivide.setOnClickListener {
 
-            val str: String = binder.clickedCommand('/')
+            val str: String = Binder.clickedCommand('/')
             tv.text = str
             tv.maxLines = 2 // Проблема с исключениями
         }
@@ -175,14 +175,14 @@ class MainActivity : ComponentActivity() {
         // проценты
         btnPercent.setOnClickListener {
 
-            val str: String = binder.clickedPercent(tv.text.toString())
+            val str: String = Binder.clickedPercent(tv.text.toString())
             tv.text = str
         }
 
         // посчитать
         btnEquals.setOnClickListener {
 
-            val str: String = binder.clickedEquals(tv.text.toString())
+            val str: String = Binder.clickedEquals(tv.text.toString())
             tv.text = str
             tv.maxLines = 2
         }

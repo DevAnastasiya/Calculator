@@ -14,11 +14,11 @@ object CommonBinder {
     // 2. При необходимости связывается с command-ами
     // 3. Записывает и хранит операнды и операторы
 
-    private val Divide_Com = DivideCommand()
-    private val Minus_Com = MinusCommand()
-    private val Multiply_Com = MultiplyCommand()
-    private val Percent_Com = PercentCommand()
-    private val Plus_Com = PlusCommand()
+    private val divideCom = DivideCommand()
+    private val minusCom = MinusCommand()
+    private val multiplyCom = MultiplyCommand()
+    private val percentCom = PercentCommand()
+    private val plusCom = PlusCommand()
 
     private const val PLUS = "+"
     private const val MINUS = "-"
@@ -30,54 +30,58 @@ object CommonBinder {
     private const val POINT = '.'
 
 
-    private var first_number = String()
+    private var firstNumber = String()
     private var activeCommand = String() // оператор
-    private var second_number = String()
+    private var secondNumber = String()
     private var pointAllowance = true // разрешение для ввода точки
 
     fun clickedDeleteLast(text: String): String {
         if (text.isEmpty())
             return text
-        val newString = text.dropLast(1)
-        if (text == activeCommand) {
-            activeCommand = newString
 
+        val newString = text.dropLast(1)
+
+        if (text.last() == POINT) // Удаляем точку
+            pointAllowance = true
+
+        if (text == activeCommand) { // Удаляем оператор
+            activeCommand = newString
         } else {
             if (activeCommand.isEmpty()) // значит работаем с firstNumber
-                first_number = newString
+                firstNumber = newString
             else
-                second_number = newString
+                secondNumber = newString
         }
         return newString
     }
 
     fun clickedTwoZeros(): String {
         if (activeCommand.isEmpty()) {
-            first_number += "$ZERO$ZERO"
-            return first_number
+            firstNumber += "$ZERO$ZERO"
+            return firstNumber
 
         } else {
-            second_number += "$ZERO$ZERO"
-            return second_number
+            secondNumber += "$ZERO$ZERO"
+            return secondNumber
         }
     }
 
     fun clickedClear(): String { // Очистка данных
-        first_number = String()
+        firstNumber = String()
         activeCommand = String()
-        second_number = String()
+        secondNumber = String()
         pointAllowance = true
         return String()
     }
 
     fun clickedDigit(c: Char): String { // Цифра или точка
         if (activeCommand.isEmpty()) {
-            first_number += c
-            return first_number
+            firstNumber += c
+            return firstNumber
 
         } else {
-            second_number += c
-            return second_number
+            secondNumber += c
+            return secondNumber
         }
     }
 
@@ -88,27 +92,27 @@ object CommonBinder {
 
         val temp: String
         if (activeCommand.isEmpty()) { // "20%..." - ищем процент от второго числа
-            temp = first_number
-            first_number = Percent_Com.execute(first_number, second_number)
+            temp = firstNumber
+            firstNumber = percentCom.execute(firstNumber, secondNumber)
             activeCommand = MULTIPLY
 
         } else {  // "100 - 20%..."
-            temp = second_number
-            second_number = Percent_Com.execute(first_number, second_number)
+            temp = secondNumber
+            secondNumber = percentCom.execute(firstNumber, secondNumber)
         }
         pointAllowance = true
         return temp + PERCENT
     }
 
     fun clickedEquals(text: String): String { // Проверка на допустимость ввода "="
-        return if (second_number.isEmpty())
+        return if (secondNumber.isEmpty())
             text
         else
             clickedCommand(EQUALS)
     }
 
     fun clickedPoint(text: String): String { // Проверка на допустимость ввода "."
-       return if (text.isNotEmpty()) {
+        return if (text.isNotEmpty()) {
             if (pointAllowance) {
                 if (text.last().isDigit()) {
                     pointAllowance = false
@@ -123,44 +127,49 @@ object CommonBinder {
 
     fun clickedCommand(c: Char): String {
         if (activeCommand.isEmpty()) {
-            activeCommand = String() + c // Запись оператора
+            activeCommand = c.toString() // Запись оператора
             pointAllowance = true
             return activeCommand
 
         } else {
-            if (second_number.isEmpty()) {
-                activeCommand = String() + c // Смена оператора
+            if (secondNumber.isEmpty()) {
+                activeCommand = c.toString()  // Смена оператора
                 return activeCommand
             }
 
             var temp = String()
             when (activeCommand) {
                 (PLUS) -> {
-                    temp = Plus_Com.execute(first_number, second_number)
+                    temp = plusCom.execute(firstNumber, secondNumber)
                 }
 
                 (MINUS) -> {
-                    temp = Minus_Com.execute(first_number, second_number)
+                    temp = minusCom.execute(firstNumber, secondNumber)
                 }
 
                 (DIVIDE) -> {
-                    temp = Divide_Com.execute(first_number, second_number)
+                    temp = divideCom.execute(firstNumber, secondNumber)
                 }
 
                 (MULTIPLY) -> {
-                    temp = Multiply_Com.execute(first_number, second_number)
+                    temp = multiplyCom.execute(firstNumber, secondNumber)
                 }
             }
-            second_number = String()
+            secondNumber = String()
 
             if (c == EQUALS) { // Если ввели команду "=" - очищаем данные
-                first_number = String()
+                firstNumber = String()
                 activeCommand = String()
             } else {
-                first_number = temp
-                activeCommand = String() + c
+                firstNumber = temp
+                activeCommand = c.toString()
             }
 
+            try {
+                temp.toDouble()
+            } catch (e: Exception) {
+                return temp
+            }
             temp = if (temp.endsWith(".0"))
                 temp.dropLast(2)
             else
