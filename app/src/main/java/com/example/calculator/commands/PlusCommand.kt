@@ -1,17 +1,14 @@
 package com.example.calculator.commands
 
-import com.example.calculator.Exceptions
 import com.example.claculator.common.Command
 
 class PlusCommand : Command {
 
-    private val exceptions = Exceptions()
-    override fun execute(firstNumber: String, secondNumber: String): String {
+    override fun execute(firstNumber: String, secondNumber: String): String =
 
-        if (exceptions.format(firstNumber, secondNumber).isEmpty()) {
-            val temp: Double = firstNumber.toDouble() + secondNumber.toDouble()
-            return temp.toString()
+        try {
+            (firstNumber.toDouble() + secondNumber.toDouble()).toString()
+        } catch (e: NumberFormatException) {
+            "Неверный формат"
         }
-        return exceptions.format(firstNumber, secondNumber)
-    }
 }

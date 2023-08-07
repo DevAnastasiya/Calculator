@@ -1,19 +1,20 @@
 package com.example.calculator.commands
 
-import com.example.calculator.Exceptions
 import com.example.claculator.common.Command
 
 class DivideCommand : Command {
 
-    private val exceptions = Exceptions()
     override fun execute(firstNumber: String, secondNumber: String): String {
-
-        if (exceptions.format(firstNumber, secondNumber).isEmpty()) {
-            if (exceptions.divide(firstNumber, secondNumber).isEmpty()) {
-                return (firstNumber.toDouble() / secondNumber.toDouble()).toString()
+        if (secondNumber.toDouble() == 0.0)
+            return "Делить на 0 нельзя!"
+        return try {
+            (firstNumber.toDouble() / secondNumber.toInt()).toString()
+        } catch (e: Exception) {
+            when (e) {
+                is NumberFormatException -> "Неверный формат"
+                is ArithmeticException -> "Делить на 0 нельзя!"
+                else -> "Ошибка деления"
             }
-            return exceptions.divide(firstNumber, secondNumber)
         }
-        return exceptions.format(firstNumber, secondNumber)
     }
 }

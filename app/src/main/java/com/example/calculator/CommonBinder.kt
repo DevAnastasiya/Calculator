@@ -1,14 +1,11 @@
 package com.example.claculator.common
 
-import com.example.calculator.commands.ClearCommand
-import com.example.calculator.commands.DeleteLastCommand
 import com.example.calculator.commands.DivideCommand
 import com.example.calculator.commands.MinusCommand
 import com.example.calculator.commands.MultiplyCommand
 import com.example.calculator.commands.PercentCommand
 import com.example.calculator.commands.PlusCommand
-import com.example.calculator.commands.TwoZerosCommand
-import com.example.calculator.commands.ZeroCommand
+import kotlin.math.roundToInt
 
 object CommonBinder {
 
@@ -17,120 +14,170 @@ object CommonBinder {
     // 2. При необходимости связывается с command-ами
     // 3. Записывает и хранит операнды и операторы
 
-    private val clearCom = ClearCommand()
-    private val deleteCom = DeleteLastCommand()
     private val divideCom = DivideCommand()
     private val minusCom = MinusCommand()
     private val multiplyCom = MultiplyCommand()
     private val percentCom = PercentCommand()
     private val plusCom = PlusCommand()
-    private val zeroCom = ZeroCommand()
 
-    private val plus = "+"
-    private val minus = "-"
-    private val divide = "/"
-    private val multiply = "*"
-    private val point = "."
-    private val equals = "="
-    private val percent = "%"
-    private val twoZeros = 'z'
-    private val zero = "0"
+    private const val PLUS = "+"
+    private const val MINUS = "-"
+    private const val DIVIDE = "/"
+    private const val MULTIPLY = "*"
+    private const val EQUALS = '='
+    private const val PERCENT = '%'
+    private const val ZERO = "0"
+    private const val POINT = '.'
 
-    private var first_number = String()
+
+    private var firstNumber = String()
     private var activeCommand = String() // оператор
-    private var second_number = String()
+    private var secondNumber = String()
+    private var pointAllowance = true // разрешение для ввода точки
 
-    var readyToClear = false
-    var pointAllowance = true
+    fun clickedDeleteLast(text: String): String {
+        if (text.isEmpty())
+            return text
 
-    fun clicked(str: String): String { // Для clear, deleteLast
-        if (str.isEmpty()) {
-            first_number = String()
-            activeCommand = String()
-            second_number = String()
-            return clearCom.execute()
+        val newString = text.dropLast(1)
+
+        if (text.last() == POINT) // Удаляем точку
+            pointAllowance = true
+
+        if (text == activeCommand) { // Удаляем оператор
+            activeCommand = newString
         } else {
-            if (str == activeCommand) {
-                activeCommand = String()
-            }
-            if (str == first_number) { // значит работает с firstNumber
-                first_number = deleteCom.execute(str)
-            } else {
-                second_number = deleteCom.execute(str)
-            }
-            return deleteCom.execute(str)
+            if (activeCommand.isEmpty()) // значит работаем с firstNumber
+                firstNumber = newString
+            else
+                secondNumber = newString
+        }
+        return newString
+    }
+
+    fun clickedTwoZeros(): String {
+        if (activeCommand.isEmpty()) {
+            firstNumber += "$ZERO$ZERO"
+            return firstNumber
+
+        } else {
+            secondNumber += "$ZERO$ZERO"
+            return secondNumber
         }
     }
 
-    fun clicked(c: Char): String {
+    fun clickedClear(): String { // Очистка данных
+        firstNumber = String()
+        activeCommand = String()
+        secondNumber = String()
+        pointAllowance = true
+        return String()
+    }
+
+    fun clickedDigit(c: Char): String { // Цифра или точка
         if (activeCommand.isEmpty()) {
-            if (c.isDigit() ||
-                c.toString() == point
-            ) { // Запись первого числа
-                if (c == twoZeros)
-                    first_number += zero + zero
-                else
-                    first_number += c
-                return first_number
-            } else {
-                if (c.toString() == percent) { // "20%..."
-                    first_number = (first_number.toDouble() / 100).toString()
-                    activeCommand = multiply
-                    return first_number
-                }
-                activeCommand = String() + c // Запись оператора
+            firstNumber += c
+            return firstNumber
+
+        } else {
+            secondNumber += c
+            return secondNumber
+        }
+    }
+
+    fun clickedPercent(text: String): String {
+
+        if (text.last().isDigit().not())
+            return text
+
+        val temp: String
+        if (activeCommand.isEmpty()) { // "20%..." - ищем процент от второго числа
+            temp = firstNumber
+            firstNumber = percentCom.execute(firstNumber, secondNumber)
+            activeCommand = MULTIPLY
+
+        } else {  // "100 - 20%..."
+            temp = secondNumber
+            secondNumber = percentCom.execute(firstNumber, secondNumber)
+        }
+        pointAllowance = true
+        return temp + PERCENT
+    }
+
+    fun clickedEquals(text: String): String { // Проверка на допустимость ввода "="
+        return if (secondNumber.isEmpty())
+            text
+        else
+            clickedCommand(EQUALS)
+    }
+
+    fun clickedPoint(text: String): String { // Проверка на допустимость ввода "."
+        return if (text.isNotEmpty()) {
+            if (pointAllowance) {
+                if (text.last().isDigit()) {
+                    pointAllowance = false
+                    clickedDigit(POINT)
+                } else
+                    text
+            } else
+                text
+        } else
+            text
+    }
+
+    fun clickedCommand(c: Char): String {
+        if (activeCommand.isEmpty()) {
+            activeCommand = c.toString() // Запись оператора
+            pointAllowance = true
+            return activeCommand
+
+        } else {
+            if (secondNumber.isEmpty()) {
+                activeCommand = c.toString()  // Смена оператора
                 return activeCommand
             }
-        } else {
-            if (c.isDigit() ||
-                c.toString() == point
-            ) { // Запись второго числа
-                if (c == twoZeros)
-                    second_number += zero + zero
-                else
-                    second_number += c
-                return second_number
+
+            var temp = String()
+            when (activeCommand) {
+                (PLUS) -> {
+                    temp = plusCom.execute(firstNumber, secondNumber)
+                }
+
+                (MINUS) -> {
+                    temp = minusCom.execute(firstNumber, secondNumber)
+                }
+
+                (DIVIDE) -> {
+                    temp = divideCom.execute(firstNumber, secondNumber)
+                }
+
+                (MULTIPLY) -> {
+                    temp = multiplyCom.execute(firstNumber, secondNumber)
+                }
+            }
+            secondNumber = String()
+
+            if (c == EQUALS) { // Если ввели команду "=" - очищаем данные
+                firstNumber = String()
+                activeCommand = String()
             } else {
-                if (second_number.isEmpty()) { // Смена оператора
-                    activeCommand = String() + c
-                    return activeCommand
-                }
-                if (c.toString() == percent) { // 100 - 20%...
-                    second_number = (
-                            first_number.toDouble() / 100 * second_number.toDouble()).toString()
-                }
+                firstNumber = temp
+                activeCommand = c.toString()
+            }
 
-                var temp = String()
-                when (activeCommand) {
-                    (plus) -> {
-                        temp = plusCom.execute(first_number, second_number)
-                    }
-
-                    (minus) -> {
-                        temp = minusCom.execute(first_number, second_number)
-                    }
-
-                    (divide) -> {
-                        temp = divideCom.execute(first_number, second_number)
-                    }
-
-                    (multiply) -> {
-                        temp = multiplyCom.execute(first_number, second_number)
-                    }
-                }
-                second_number = String()
-
-                if (c.toString() == equals) { // Если ввели команду "=" - очищаем данные
-                    first_number = String()
-                    activeCommand = String()
-                } else {
-                    first_number = temp
-                    activeCommand = String() + c
-                }
-                if (temp.endsWith(".0"))
-                    temp = temp.toDouble().toInt().toString()
+            try {
+                temp.toDouble()
+            } catch (e: Exception) {
                 return temp
             }
+            temp = if (temp.endsWith(".0"))
+                temp.dropLast(2)
+            else
+                ((temp.toDouble() * 1000).roundToInt().toDouble() / 1000).toString()
+            // В строке выше не убрать какое-либо из приведений к типу - иначе неверное округление
+
+            pointAllowance = true
+            return temp
         }
     }
 }
